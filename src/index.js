@@ -13,6 +13,9 @@ _.debounce(() => {
 const checkCountries = () => {
   const fetchCountries = fetch('https://restcountries.com/v3.1/all');
   fetchCountries.then((response) => {
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
   const countriesData = response.json();
   return countriesData;
 }).then((response) => {
@@ -24,8 +27,11 @@ const checkCountries = () => {
       <li>${country.flags.svg}</li>
       <li>${Object.values(country.languages)}</li>`;
             return countryList.innerHTML = markup;
-        }
-        
+                    }         
      })
+     fetchCountries.catch((error) => {
+      console.log('Error');
+    })
+    return console.log('nie ma takiego kraju');       
   })
 };
