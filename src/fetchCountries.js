@@ -44,6 +44,7 @@ return countriesData;
           flags.forEach(flag => {
           flag.style.width = "30px";
           }); 
+
           const itemList = document.querySelectorAll('.list__item');
           itemList.forEach(item => {
           item.addEventListener('click', () => {
@@ -60,7 +61,6 @@ return countriesData;
                      flag.style.width = "80px";
                 }
             })
-                     
           })
           })
                      

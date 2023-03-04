@@ -7,7 +7,6 @@ export const countryInfo = document.querySelector('.country-info');
 countryList.style.listStyle = "none";
 countryList.style.fontSize = "30px";
 
-
 searchInput.addEventListener("input", 
 _.debounce(() => {
   let searchValue = searchInput.value;
