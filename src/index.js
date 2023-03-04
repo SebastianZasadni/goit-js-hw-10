@@ -1,37 +1,52 @@
 import './css/styles.css';
-
+import Notiflix from 'notiflix';
 const DEBOUNCE_DELAY = 300;
-const inputBtn = document.querySelector("#search-box");
+const searchInput = document.querySelector("#search-box");
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
+countryList.style.listStyle = "none";
+countryList.style.fontSize = "30px";
+document.querySelector('body').style.backgroundColor = "grey";
 
-inputBtn.addEventListener("input", 
+searchInput.addEventListener("input", 
 _.debounce(() => {
- checkCountries();
+  let searchValue = searchInput.value;
+  searchValue = searchValue.charAt(0).toUpperCase() + searchValue.slice(1);
+  
+  fetchCountries(searchValue);
 }, DEBOUNCE_DELAY));
 
-const checkCountries = () => {
-  const fetchCountries = fetch('https://restcountries.com/v3.1/all');
-  fetchCountries.then((response) => {
+
+  const fetchCountries = searchValue => { fetch(`https://restcountries.com/v2/name/${searchValue}`)
+    .then((response) => {
     if (!response.ok) {
-      throw new Error(response.status);
+     return Notiflix.Notify.failure('Your country doesn"t exist.');
+      
     }
   const countriesData = response.json();
   return countriesData;
 }).then((response) => {
-    response.map(country=>{
-    if(country.name.common === inputBtn.value){
-      const markup = `<li>${country.name.official}</li>
-      <li>${country.capital}</li>
-      <li>${country.population}</li>
-      <li>${country.flags.svg}</li>
-      <li>${Object.values(country.languages)}</li>`;
-            return countryList.innerHTML = markup;
-                    }         
-     })
-     fetchCountries.catch((error) => {
-      console.log('Error');
-    })
-    return console.log('nie ma takiego kraju');       
-  })
-};
+  if(response.length > 10){
+   return Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+  }
+  else{
+    response.map(country => {
+      
+      if (country.name.startsWith(searchValue))
+      { 
+             
+         markup =`<li><img src="${country.flag}" class="flag-svg"> ${country.name}</li>`;
+          }
+          })
+          .join("");
+          countryList.innerHTML = markup;
+          const flags = document.querySelectorAll('.flag-svg')
+          flags.forEach(flag => {
+          flag.style.width = "30px";
+          });  
+  }
+       }) 
+      .catch((error) => {
+      
+          })
+        };
