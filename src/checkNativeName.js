@@ -1,8 +1,1 @@
-export const checkNativeName = (itemName) => {
-    if (itemName === undefined){
-        return ('');
-    }
-    else{
-        return ` (<i>${itemName}</i>)`;
-    }
-  }
+export const checkNativeName = itemName => itemName ? ` (<i>${itemName}</i>)` : '';
