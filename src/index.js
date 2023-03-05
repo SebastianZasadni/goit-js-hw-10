@@ -54,6 +54,11 @@ const setListOfCountries = data => {
   chooseByButton(data);
 };
 
+import Notiflix from 'notiflix';
+Notiflix.Notify.init({
+  position: 'center-top',
+});
+
 const setOneCountry = data => {
   const country = data[0];
   const language = country.languages.map(item => {
