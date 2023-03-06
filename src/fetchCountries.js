@@ -22,6 +22,6 @@ export const fetchCountries = searchValue => {
       checkAmountOfCountries(data);
     })
     .catch(error => {
-      return Notiflix.Notify.warning('Error! Connection timeout.');
+      return console.log('Error! Connection timeout or no country.');
     });
 };

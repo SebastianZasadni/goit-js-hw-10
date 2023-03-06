@@ -16,16 +16,15 @@ export const countryInfo = document.querySelector('.country-info');
 countryList.style.listStyle = 'none';
 countryList.style.fontSize = '30px';
 
-searchInput.addEventListener(
-  'input',
-  _.debounce(() => {
-    let searchValue = searchInput.value;
-    searchValue = searchValue.charAt(0).toUpperCase() + searchValue.slice(1);
-    countryList.innerHTML = '';
-    countryInfo.innerHTML = '';
-    fetchCountries(searchValue);
-  }, DEBOUNCE_DELAY)
-);
+const checkCountries = _.debounce(() => {
+  let searchValue = searchInput.value;
+  searchValue = searchValue.charAt(0).toUpperCase() + searchValue.slice(1);
+  countryList.innerHTML = '';
+  countryInfo.innerHTML = '';
+  fetchCountries(searchValue);
+}, DEBOUNCE_DELAY);
+
+searchInput.addEventListener('input', checkCountries);
 
 export const checkAmountOfCountries = data => {
   if (data.length == 1) {
@@ -53,11 +52,6 @@ const setListOfCountries = data => {
   });
   chooseByButton(data);
 };
-
-import Notiflix from 'notiflix';
-Notiflix.Notify.init({
-  position: 'center-top',
-});
 
 const setOneCountry = data => {
   const country = data[0];
