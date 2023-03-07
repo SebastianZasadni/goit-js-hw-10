@@ -3,15 +3,15 @@ Notiflix.Notify.init({
   position: 'center-top',
 });
 
-import { fetchCountries } from './fetchCountries';
+import { fetchData } from './fetchCountries';
 import { checkNativeName } from './checkNativeName';
 import { convertToInternationalCurrencySystem } from './converterCurrency';
 
 const DEBOUNCE_DELAY = 300;
 
-const searchInput = document.querySelector('#search-box');
-const countryList = document.querySelector('.country-list');
-const countryInfo = document.querySelector('.country-info');
+export const searchInput = document.querySelector('#search-box');
+export const countryList = document.querySelector('.country-list');
+export const countryInfo = document.querySelector('.country-info');
 
 countryList.style.listStyle = 'none';
 countryList.style.fontSize = '30px';
@@ -21,18 +21,12 @@ const checkCountries = _.debounce(() => {
   searchValue = searchValue.charAt(0).toUpperCase() + searchValue.slice(1);
   countryList.innerHTML = '';
   countryInfo.innerHTML = '';
-  fetchCountries(searchValue)
-    .then(data => checkAmountOfCountries(data))
-    .catch(error => {
-      return Notiflix.Notify.failure(
-        'Oops, there is no country with that name.'
-      );
-    });
+  fetchData(searchValue);
 }, DEBOUNCE_DELAY);
 
 searchInput.addEventListener('input', checkCountries);
 
-const checkAmountOfCountries = data => {
+export const checkAmountOfCountries = data => {
   if (data.length == 1) {
     setOneCountry(data);
   } else if (data.length > 10) {

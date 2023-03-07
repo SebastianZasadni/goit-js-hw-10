@@ -3,10 +3,26 @@ Notiflix.Notify.init({
   position: 'center-top',
 });
 
-export const fetchCountries = async searchValue => {
-  const response = await fetch(
+import { checkAmountOfCountries } from './index';
+
+const fetchCountries = searchValue => {
+  fetch(
     `https://restcountries.com/v2/name/${searchValue}?fields=name,capital,population,languages,flag`
-  );
-  const countries = await response.json();
-  return countries;
+  )
+    .then(response => {
+      if (!response.ok) {
+        return Notiflix.Notify.failure(
+          'Oops, there is no country with that name.'
+        );
+      }
+      const countriesData = response.json();
+      return countriesData;
+    })
+    .then(data => {
+      checkAmountOfCountries(data);
+    })
+    .catch(error => {
+      return Notiflix.Notify.warning('Error! Connection timeout.');
+    });
 };
+
