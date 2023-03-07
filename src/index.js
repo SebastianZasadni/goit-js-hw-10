@@ -21,12 +21,17 @@ const checkCountries = _.debounce(() => {
   searchValue = searchValue.charAt(0).toUpperCase() + searchValue.slice(1);
   countryList.innerHTML = '';
   countryInfo.innerHTML = '';
-  fetchCountries(searchValue);
+  fetchCountries(searchValue)
+  .then(data => checkAmountOfCountries(data))
+  .catch(error =>  {return Notiflix.Notify.failure(
+          'Oops, there is no country with that name.'
+        )});
 }, DEBOUNCE_DELAY);
 
 searchInput.addEventListener('input', checkCountries);
 
-export const checkAmountOfCountries = data => {
+
+checkAmountOfCountries = data => {
   if (data.length == 1) {
     setOneCountry(data);
   } else if (data.length > 10) {
