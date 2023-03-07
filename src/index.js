@@ -22,14 +22,15 @@ const checkCountries = _.debounce(() => {
   countryList.innerHTML = '';
   countryInfo.innerHTML = '';
   fetchCountries(searchValue)
-  .then(data => checkAmountOfCountries(data))
-  .catch(error =>  {return Notiflix.Notify.failure(
-          'Oops, there is no country with that name.'
-        )});
+    .then(data => checkAmountOfCountries(data))
+    .catch(error => {
+      return Notiflix.Notify.failure(
+        'Oops, there is no country with that name.'
+      );
+    });
 }, DEBOUNCE_DELAY);
 
 searchInput.addEventListener('input', checkCountries);
-
 
 checkAmountOfCountries = data => {
   if (data.length == 1) {

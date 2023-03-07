@@ -4,9 +4,9 @@ Notiflix.Notify.init({
 });
 
 export const fetchCountries = async searchValue => {
-      const response = await fetch(
-      `https://restcountries.com/v2/name/${searchValue}?fields=name,capital,population,languages,flag`
-    );
-    const countries = await response.json();
-    return countries;
-   };
+  const response = await fetch(
+    `https://restcountries.com/v2/name/${searchValue}?fields=name,capital,population,languages,flag`
+  );
+  const countries = await response.json();
+  return countries;
+};
