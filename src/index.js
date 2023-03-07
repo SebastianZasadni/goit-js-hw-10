@@ -32,7 +32,7 @@ const checkCountries = _.debounce(() => {
 
 searchInput.addEventListener('input', checkCountries);
 
-checkAmountOfCountries = data => {
+const checkAmountOfCountries = data => {
   if (data.length == 1) {
     setOneCountry(data);
   } else if (data.length > 10) {
