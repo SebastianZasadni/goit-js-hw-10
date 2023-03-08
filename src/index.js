@@ -3,7 +3,7 @@ Notiflix.Notify.init({
   position: 'center-top',
 });
 
-import { fetchData } from './fetchCountries';
+import { fetchCountries } from './fetchCountries';
 import { checkNativeName } from './checkNativeName';
 import { convertToInternationalCurrencySystem } from './converterCurrency';
 
@@ -16,30 +16,34 @@ export const countryInfo = document.querySelector('.country-info');
 countryList.style.listStyle = 'none';
 countryList.style.fontSize = '30px';
 
-const checkCountries = _.debounce(() => {
-  let searchValue = searchInput.value;
-  searchValue = searchValue.charAt(0).toUpperCase() + searchValue.slice(1);
-  countryList.innerHTML = '';
-  countryInfo.innerHTML = '';
-  fetchData(searchValue);
-}, DEBOUNCE_DELAY);
-
-searchInput.addEventListener('input', checkCountries);
-
-export const checkAmountOfCountries = data => {
-  if (data.length == 1) {
-    setOneCountry(data);
-  } else if (data.length > 10) {
+const checkAmountOfCountries = countries => {
+  if (countries.length == 1) {
+    setOneCountry(countries);
+  } else if (countries.length > 10) {
     return Notiflix.Notify.info(
       'Too many matches found. Please enter a more specific name.'
     );
   } else {
-    setListOfCountries(data);
+    setListOfCountries(countries);
   }
 };
 
-const setListOfCountries = data => {
-  const markup = data
+const checkCountries = _.debounce(async () => {
+  let searchValue = searchInput.value;
+  searchValue = searchValue.charAt(0).toUpperCase() + searchValue.slice(1);
+  countryList.innerHTML = '';
+  countryInfo.innerHTML = '';
+  const countries = await fetchCountries(searchValue);
+  if (countries.status === 404) {
+    return Notiflix.Notify.failure('Oops, there is no country with that name.');
+  }
+  checkAmountOfCountries(countries);
+}, DEBOUNCE_DELAY);
+
+searchInput.addEventListener('input', checkCountries);
+
+const setListOfCountries = countries => {
+  const markup = countries
     .map(country => {
       return `<li class="list__item" style="cursor: pointer; width: 400px;"><img src="${country.flag}" class="flag-svg"> ${country.name}</li>`;
     })
@@ -50,11 +54,11 @@ const setListOfCountries = data => {
   flags.forEach(flag => {
     flag.style.width = '30px';
   });
-  chooseByButton(data);
+  chooseByButton(countries);
 };
 
-const setOneCountry = data => {
-  const country = data[0];
+const setOneCountry = countries => {
+  const country = countries[0];
   const language = country.languages.map(item => {
     return ' ' + item.name + checkNativeName(item.nativeName);
   });
@@ -72,11 +76,11 @@ const setOneCountry = data => {
   flag.style.width = '80px';
 };
 
-const chooseByButton = data => {
+const chooseByButton = countries => {
   const itemList = document.querySelectorAll('.list__item');
   itemList.forEach(item => {
     item.addEventListener('click', () => {
-      data.forEach(country => {
+      countries.forEach(country => {
         if (country.name === item.textContent.trim()) {
           const language = country.languages.map(item => {
             return ' ' + item.name + checkNativeName(item.nativeName);
