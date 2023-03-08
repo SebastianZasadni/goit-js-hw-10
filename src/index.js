@@ -4,8 +4,8 @@ Notiflix.Notify.init({
 });
 
 import { fetchCountries } from './fetchCountries';
-import { checkNativeName } from './checkNativeName';
-import { convertToInternationalCurrencySystem } from './converterCurrency';
+import { checkNativeName } from './utils/checkNativeName';
+import { convertToInternationalCurrencySystem } from './utils/converterCurrency';
 
 const DEBOUNCE_DELAY = 300;
 
