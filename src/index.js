@@ -9,9 +9,9 @@ import { convertToInternationalCurrencySystem } from './converterCurrency';
 
 const DEBOUNCE_DELAY = 300;
 
-export const searchInput = document.querySelector('#search-box');
-export const countryList = document.querySelector('.country-list');
-export const countryInfo = document.querySelector('.country-info');
+const searchInput = document.querySelector('#search-box');
+const countryList = document.querySelector('.country-list');
+const countryInfo = document.querySelector('.country-info');
 
 countryList.style.listStyle = 'none';
 countryList.style.fontSize = '30px';
